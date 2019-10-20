@@ -14,9 +14,16 @@ class dl_youtube_com extends Download
             $video_id = $video_id[0];
         }
 
-        $data = $this->lib->curl('http://www.youtube.com/get_video_info?video_id=' . $video_id . '&asv=3&el=detailpage&hl=en_US&s' . 't' . 's' . '=0', "", "", 0);
+        $data = $this->lib->curl("https://www.youtube.com/get_video_info?video_id=".$video_id."&el=embedded&ps=default&eurl=&gl=US&hl=en", "", "", 0);
 
         $response = array_map('urldecode', $this->FormToArr(substr($data, strpos($data, "\r\n\r\n") + 4)));
+        $videobaslikCek = $this->lib->curl("http://www.youtube.com/oembed?url=". $url ."&format=json", "", "", 0);
+
+
+
+$title = json_decode($videobaslikCek,true);
+$response['title']=$title["title"];
+
 
         if (!empty($response['reason'])) {
             $this->error('[' . htmlentities($response['errorcode']) . '] ' . htmlentities($response['reason']), true, false);
@@ -71,6 +78,7 @@ class dl_youtube_com extends Download
         }
 
         if (empty($response['title'])) {
+           
             $this->error('No video title found! Download halted.', true, false);
         }
 
@@ -141,6 +149,7 @@ class dl_youtube_com extends Download
  * Open Source Project
  * New Vinaget by LTT
  * Version: 3.3 LTS
- * Youtube.com Download Plugin
- * Date: 01.09.2018
+ * Youtube.com Download Plugin By Enes BiBER
+ * Date: 21.10.2019
  */
+ ?>
